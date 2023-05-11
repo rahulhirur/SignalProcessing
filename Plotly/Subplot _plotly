@@ -1,0 +1,41 @@
+
+#rahul
+
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+
+# create data for the lines
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y1 = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+y2 = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]
+y3 = [20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
+
+# create subplots
+fig = make_subplots(rows=2, cols=2, shared_xaxes=True, shared_yaxes=True,
+                    subplot_titles=("Subplot 1", "Subplot 2", "Subplot 3", "Subplot 4"))
+
+# add traces to each subplot
+fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Line 1'), row=1, col=1)
+fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Line 2'), row=1, col=1)
+fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Line 3'), row=1, col=1)
+
+fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Line 1'), row=1, col=2)
+fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Line 2'), row=1, col=2)
+fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Line 3'), row=1, col=2)
+
+fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Line 1'), row=2, col=1)
+fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Line 2'), row=2, col=1)
+fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Line 3'), row=2, col=1)
+
+fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Line 1'), row=2, col=2)
+fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Line 2'), row=2, col=2)
+fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Line 3'), row=2, col=2)
+
+# update layout
+fig.update_layout(title='My Plot',
+                  xaxis=dict(title='X Axis'),
+                  yaxis=dict(title='Y Axis'),
+                  legend=dict(title='Legend'))
+
+# show plot
+fig.show()
