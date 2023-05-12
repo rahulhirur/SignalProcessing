@@ -56,3 +56,5 @@ fig["data"][0]["xaxis"].relayout_event = zoom_event_handler
 
 # Show the plot
 fig.show()
+
+
