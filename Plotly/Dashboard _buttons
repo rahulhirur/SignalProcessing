@@ -1,5 +1,4 @@
 
-
 import dash
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
@@ -8,32 +7,22 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.Button('Button A', id='button-a', n_clicks=0),
-    html.Div(id='button-b-c')
+    html.Button('Button B', id='button-b', n_clicks=0)
 ])
 
 @app.callback(
-    Output('button-a', 'style'),
-    Output('button-b-c', 'children'),
-    Input('button-a', 'n_clicks')
+    [Output('button-a', 'style'), Output('button-b', 'style')],
+    [Input('button-a', 'n_clicks'), Input('button-b', 'n_clicks')]
 )
-def update_button_a(n_clicks):
-    if n_clicks > 0:
-        return {'display': 'none'}, html.Button('Button B', id='button-b', n_clicks=0)
+def hide_button(n_clicks_a, n_clicks_b):
+    if n_clicks_a > 0:
+        return {'display': 'none'}, {'display': 'block'}
+    elif n_clicks_b > 0:
+        return {'display': 'block'}, {'display': 'none'}
     else:
-        return {}, None
-
-@app.callback(
-    Output('button-b', 'style'),
-    Output('button-b-c', 'children'),
-    Input('button-b', 'n_clicks'),
-    State('button-b-c', 'children')
-)
-def update_button_b(n_clicks, current_children):
-    if n_clicks > 0:
-        return {'display': 'none'}, html.Button('Button C', id='button-c', n_clicks=0)
-    else:
-        return {}, current_children
+        return {'display': 'block'}, {'display': 'block'}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
 
