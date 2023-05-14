@@ -1,27 +1,97 @@
 
+
+
 import dash
-import dash_core_components as dcc
+
 import dash_html_components as html
-from dash.dependencies import Input, Output
+
+import dash_core_components as dcc
 
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
-    html.H1("My Dashboard"),
-    html.Button("Click me!", id="button-1"),
-    html.Div(id="button-output")
+
+    html.H1("Welcome to my dashboard"),
+
+    html.Button('Button A', id='button-a', n_clicks=0),
+
+    html.Div(id='button-output')
+
 ])
 
 @app.callback(
-    Output("button-1", "style"),
-    Output("button-output", "children"),
-    Input("button-1", "n_clicks")
+
+    dash.dependencies.Output('button-output', 'children'),
+
+    [dash.dependencies.Input('button-a', 'n_clicks')]
+
 )
-def update_button(n_clicks):
-    if n_clicks is None:
-        return {}, None
+
+def update_output(n_clicks):
+
+    if n_clicks == 1:
+
+        return html.Div([
+
+            html.Button('Button B', id='button-b', n_clicks=0),
+
+            html.Div(id='button-output2')
+
+        ])
+
     else:
-        return {"display": "none"}, html.Button("New Button", id="button-2")
+
+        return ''
+
+@app.callback(
+
+    dash.dependencies.Output('button-output2', 'children'),
+
+    [dash.dependencies.Input('button-b', 'n_clicks')]
+
+)
+
+def update_output2(n_clicks):
+
+    if n_clicks == 1:
+
+        return html.Div([
+
+            html.Button('Button C', id='button-c', n_clicks=0),
+
+            html.Div(id='button-output3')
+
+        ])
+
+    else:
+
+        return ''
+
+@app.callback(
+
+    dash.dependencies.Output('button-output3', 'children'),
+
+    [dash.dependencies.Input('button-c', 'n_clicks')]
+
+)
+
+def update_output3(n_clicks):
+
+    if n_clicks == 1:
+
+        return html.Div([
+
+            html.P('You clicked button C!')
+
+        ])
+
+    else:
+
+        return ''
 
 if __name__ == '__main__':
+
     app.run_server(debug=True)
+
+
+
