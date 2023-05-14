@@ -2,47 +2,26 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
 
-# Define app
 app = dash.Dash(__name__)
 
-# Define layout
 app.layout = html.Div([
-    html.H1('Dashboard'),
-    html.Div([
-        html.Button('A', id='button-A', n_clicks=0),
-        html.Button('B', id='button-B', n_clicks=0)
-    ]),
-    html.Div(id='address-bar-container', style={'display': 'none'}),
-    html.Div(id='output-container')
+    html.H1("My Dashboard"),
+    html.Button("Click me!", id="button-1"),
+    html.Div(id="button-output")
 ])
 
-# Define callbacks
 @app.callback(
-    [Output('button-A', 'style'), Output('button-B', 'style'), Output('address-bar-container', 'style')],
-    [Input('button-A', 'n_clicks'), Input('button-B', 'n_clicks')],
-    [State('button-A', 'style'), State('button-B', 'style')]
+    Output("button-1", "style"),
+    Output("button-output", "children"),
+    Input("button-1", "n_clicks")
 )
-def update_layout(n_clicks_A, n_clicks_B, style_A, style_B):
-    if n_clicks_A > 0:
-        style_A['display'] = 'none'
-        style_B['display'] = 'none'
-        return style_A, style_B, {'display': 'block'}
-    elif n_clicks_B > 0:
-        style_A['display'] = 'none'
-        style_B['display'] = 'none'
-        return style_A, style_B, {'display': 'block'}
+def update_button(n_clicks):
+    if n_clicks is None:
+        return {}, None
     else:
-        return style_A, style_B, {'display': 'none'}
+        return {"display": "none"}, html.Button("New Button", id="button-2")
 
-# Run app
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-
-
-
-
-
-
