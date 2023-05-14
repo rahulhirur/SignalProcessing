@@ -1,49 +1,40 @@
-
 import dash
-import dash_core_components as dcc
 import dash_html_components as html
+import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.Div([
-        html.Button('A', id='button-a', n_clicks=0),
-        html.Button('B', id='button-b', n_clicks=0),
-    ], style={'display': 'flex', 'justify-content': 'center', 'margin-top': '50px'}),
+        html.Button('A', id='btn-A', n_clicks=0),
+        html.Button('B', id='btn-B', n_clicks=0),
+    ], className='button-container'),
     html.Div([
-        html.Label('Address 1'),
-        dcc.Input(id='address-1', type='text', placeholder='Enter address 1', style={'margin': '10px'}),
-        html.Label('Address 2'),
-        dcc.Input(id='address-2', type='text', placeholder='Enter address 2', style={'margin': '10px'}),
-        html.Button('Submit', id='submit-button', n_clicks=0, style={'margin': '10px'}),
-    ], style={'display': 'none', 'margin-top': '50px'}),
-    html.Div(id='output-container', style={'margin-top': '50px'}),
+        html.Label('Enter address A:'),
+        dcc.Input(id='address-A', type='text'),
+        html.Br(),
+        html.Label('Enter address B:'),
+        dcc.Input(id='address-B', type='text'),
+        html.Br(),
+        html.Button('Submit', id='submit-btn', n_clicks=0)
+    ], className='address-container', style={'display': 'none'})
 ])
 
 @app.callback(
-    Output('output-container', 'children'),
-    [Input('submit-button', 'n_clicks')],
-    [State('address-1', 'value'), State('address-2', 'value')])
-def update_output(n_clicks, address_1, address_2):
-    if n_clicks > 0:
-        return f'You submitted Address 1: {address_1} and Address 2: {address_2}'
-
-@app.callback(
-    Output('button-a', 'style'),
-    Output('button-b', 'style'),
-    Output('address-1', 'style'),
-    Output('address-2', 'style'),
-    Output('submit-button', 'style'),
-    Output('output-container', 'style'),
-    Input('button-a', 'n_clicks'),
-    Input('button-b', 'n_clicks')
+    Output('address-container', 'style'),
+    [Input('btn-A', 'n_clicks'),
+     Input('btn-B', 'n_clicks')]
 )
-def hide_show_elements(button_a, button_b):
-    if button_a > 0 or button_b > 0:
-        return {'display': 'none'}, {'display': 'none'}, {'display': 'block'}, {'display': 'block'}, {'display': 'block'}, {'display': 'block'}
+def show_address_container(btn_a_clicks, btn_b_clicks):
+    if btn_a_clicks > 0 or btn_b_clicks > 0:
+        return {'display': 'block'}
     else:
-        return {'display': 'block'}, {'display': 'block'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}
+        return {'display': 'none'}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
+
+
