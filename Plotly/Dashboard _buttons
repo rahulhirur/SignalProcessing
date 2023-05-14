@@ -1,36 +1,45 @@
-import dash
-import dash_html_components as html
-import dash_core_components as dcc
-from dash.dependencies import Input, Output, State
 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+
+# Initialize the app
 app = dash.Dash(__name__)
 
+# Define the app layout
 app.layout = html.Div([
     html.Div([
-        html.Button('A', id='btn-A', n_clicks=0),
-        html.Button('B', id='btn-B', n_clicks=0),
-    ], className='button-container'),
-    html.Div([
-        html.Label('Enter address A:'),
-        dcc.Input(id='address-A', type='text'),
+        html.H1("Welcome to the Dashboard!"),
         html.Br(),
-        html.Label('Enter address B:'),
-        dcc.Input(id='address-B', type='text'),
-        html.Br(),
-        html.Button('Submit', id='submit-btn', n_clicks=0)
-    ], className='address-container', style={'display': 'none'})
+        html.Button("A", id="btn-a", n_clicks=0),
+        html.Button("B", id="btn-b", n_clicks=0),
+    ], style={"textAlign": "center"}),
+    html.Div(id="page-content")
 ])
 
+# Define the callback for button A
 @app.callback(
-    Output('address-container', 'style'),
-    [Input('btn-A', 'n_clicks'),
-     Input('btn-B', 'n_clicks')]
+    dash.dependencies.Output("page-content", "children"),
+    [dash.dependencies.Input("btn-a", "n_clicks")]
 )
-def show_address_container(btn_a_clicks, btn_b_clicks):
-    if btn_a_clicks > 0 or btn_b_clicks > 0:
-        return {'display': 'block'}
-    else:
-        return {'display': 'none'}
+def display_address_a(n_clicks):
+    if n_clicks > 0:
+        return html.Div([
+            html.H3("Folder A Selection:"),
+            dcc.Input(id="address-a", type="text", placeholder="Enter folder address"),
+        ])
+
+# Define the callback for button B
+@app.callback(
+    dash.dependencies.Output("page-content", "children"),
+    [dash.dependencies.Input("btn-b", "n_clicks")]
+)
+def display_address_b(n_clicks):
+    if n_clicks > 0:
+        return html.Div([
+            html.H3("Folder B Selection:"),
+            dcc.Input(id="address-b", type="text", placeholder="Enter folder address"),
+        ])
 
 if __name__ == '__main__':
     app.run_server(debug=True)
