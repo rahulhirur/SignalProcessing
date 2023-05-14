@@ -2,47 +2,46 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
 
-# Initialize the app
+# Define app
 app = dash.Dash(__name__)
 
-# Define the app layout
+# Define layout
 app.layout = html.Div([
+    html.H1('Dashboard'),
     html.Div([
-        html.H1("Welcome to the Dashboard!"),
-        html.Br(),
-        html.Button("A", id="btn-a", n_clicks=0),
-        html.Button("B", id="btn-b", n_clicks=0),
-    ], style={"textAlign": "center"}),
-    html.Div(id="page-content")
+        html.Button('A', id='button-A', n_clicks=0),
+        html.Button('B', id='button-B', n_clicks=0)
+    ]),
+    html.Div(id='address-bar-container', style={'display': 'none'}),
+    html.Div(id='output-container')
 ])
 
-# Define the callback for button A
+# Define callbacks
 @app.callback(
-    dash.dependencies.Output("page-content", "children"),
-    [dash.dependencies.Input("btn-a", "n_clicks")]
+    [Output('button-A', 'style'), Output('button-B', 'style'), Output('address-bar-container', 'style')],
+    [Input('button-A', 'n_clicks'), Input('button-B', 'n_clicks')],
+    [State('button-A', 'style'), State('button-B', 'style')]
 )
-def display_address_a(n_clicks):
-    if n_clicks > 0:
-        return html.Div([
-            html.H3("Folder A Selection:"),
-            dcc.Input(id="address-a", type="text", placeholder="Enter folder address"),
-        ])
+def update_layout(n_clicks_A, n_clicks_B, style_A, style_B):
+    if n_clicks_A > 0:
+        style_A['display'] = 'none'
+        style_B['display'] = 'none'
+        return style_A, style_B, {'display': 'block'}
+    elif n_clicks_B > 0:
+        style_A['display'] = 'none'
+        style_B['display'] = 'none'
+        return style_A, style_B, {'display': 'block'}
+    else:
+        return style_A, style_B, {'display': 'none'}
 
-# Define the callback for button B
-@app.callback(
-    dash.dependencies.Output("page-content", "children"),
-    [dash.dependencies.Input("btn-b", "n_clicks")]
-)
-def display_address_b(n_clicks):
-    if n_clicks > 0:
-        return html.Div([
-            html.H3("Folder B Selection:"),
-            dcc.Input(id="address-b", type="text", placeholder="Enter folder address"),
-        ])
-
+# Run app
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
+
 
 
 
