@@ -1,97 +1,39 @@
 
 
-
 import dash
-
 import dash_html_components as html
-
-import dash_core_components as dcc
+from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
-
-    html.H1("Welcome to my dashboard"),
-
     html.Button('Button A', id='button-a', n_clicks=0),
-
-    html.Div(id='button-output')
-
+    html.Div(id='button-b-c')
 ])
 
 @app.callback(
-
-    dash.dependencies.Output('button-output', 'children'),
-
-    [dash.dependencies.Input('button-a', 'n_clicks')]
-
+    Output('button-a', 'style'),
+    Output('button-b-c', 'children'),
+    Input('button-a', 'n_clicks')
 )
-
-def update_output(n_clicks):
-
-    if n_clicks == 1:
-
-        return html.Div([
-
-            html.Button('Button B', id='button-b', n_clicks=0),
-
-            html.Div(id='button-output2')
-
-        ])
-
+def update_button_a(n_clicks):
+    if n_clicks > 0:
+        return {'display': 'none'}, html.Button('Button B', id='button-b', n_clicks=0)
     else:
-
-        return ''
+        return {}, None
 
 @app.callback(
-
-    dash.dependencies.Output('button-output2', 'children'),
-
-    [dash.dependencies.Input('button-b', 'n_clicks')]
-
+    Output('button-b', 'style'),
+    Output('button-b-c', 'children'),
+    Input('button-b', 'n_clicks'),
+    State('button-b-c', 'children')
 )
-
-def update_output2(n_clicks):
-
-    if n_clicks == 1:
-
-        return html.Div([
-
-            html.Button('Button C', id='button-c', n_clicks=0),
-
-            html.Div(id='button-output3')
-
-        ])
-
+def update_button_b(n_clicks, current_children):
+    if n_clicks > 0:
+        return {'display': 'none'}, html.Button('Button C', id='button-c', n_clicks=0)
     else:
-
-        return ''
-
-@app.callback(
-
-    dash.dependencies.Output('button-output3', 'children'),
-
-    [dash.dependencies.Input('button-c', 'n_clicks')]
-
-)
-
-def update_output3(n_clicks):
-
-    if n_clicks == 1:
-
-        return html.Div([
-
-            html.P('You clicked button C!')
-
-        ])
-
-    else:
-
-        return ''
+        return {}, current_children
 
 if __name__ == '__main__':
-
     app.run_server(debug=True)
-
-
 
